@@ -5,10 +5,11 @@ project:
 website:
   title: "sadness=)"
   navbar:
-    left:
+    right:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: About
 
 format:
   html:
