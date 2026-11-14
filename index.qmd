@@ -2,6 +2,24 @@
 title: "sadness=)"
 ---
 
-The works for the course:
+QMD Files for Assignments 
 
-1. [Module 1](/modules/)
+Modules
+1. [Module 1: Alelle Frequencies](/Module Draft & Finals qmd/)
+2. [Module 2: Heterozygosity](/Module Draft & Finals qmd/)
+3. [Module 3: FST & Lineage Simulation](/Module Draft & Finals qmd/Module 3 Official Draft.qmd)
+4. [Module 4: Population Comparisons & IRL Data Analysis](/Module Draft & Finals qmd/Module 4 Official Draft.qmd)
+5. [Module 5: Analyzing Human Genome Data]
+
+
+Lab Assignments
+1. 
+2. [Lab 2:]
+
+
+Reports
+1. [Literature Review]
+
+
+Miscellaneous 
+1. [Test Code for Modules 2 & 3]

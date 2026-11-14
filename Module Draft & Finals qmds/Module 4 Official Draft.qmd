@@ -1,0 +1,45 @@
+---
+title: "Module 2: Official Draft"
+format: typst
+editor: visual
+---
+
+### Setting up Populations
+
+text text hi hi
+
+```{r}
+
+```
+
+### Defining Populations
+
+text text hi hi
+
+```{r}
+1 + 1
+```
+
+### Randomized Sampling 
+
+```{r}
+
+```
+
+### Genotype Counts and Frequencies
+
+```{r}
+
+```
+
+### Calculating Heterozygosity and Homozygosity
+
+```{r}
+
+```
+
+### Expected and Observed Heterozygosity 
+
+```{r}
+
+```
