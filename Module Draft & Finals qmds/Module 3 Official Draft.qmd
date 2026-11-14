@@ -155,17 +155,17 @@ for (i in 1:n_repeats) {
 #select randomized loci to work with for original and mirrored populations (so, i do need to introduce and definea  variable to show degradation, fixation, etc for the comparisons to make sense)
 #ugh
 #Pop_6_lineage <- cbind(table(Pop_6_lineage[1,]), table(Pop_6_lineage[2,]), table(Pop_6_lineage[3,]))
-Pop_6_lineage <- data.frame(Pop_6_lineage)
+#Pop_6_lineage <- data.frame(Pop_6_lineage)
 #Pop_6_lineage[order(Pop_6_lineage$)]
-Pop_6_lineage
-sample(Pop_6_lineage, 3)
+#Pop_6_lineage
+#sample(Pop_6_lineage, 3)
 
 
 #use sampled loci and genotype frequency (means?) per generation to calculate deviations..
 
 ```
 
-###  Genotype Counts and Frequencies
+### Genotype Counts and Frequencies
 
 Genotype counts are bound per population at the sampled locus. The same formula is used for defining and binding each population's genotype frequencies.
 
@@ -174,23 +174,23 @@ Genotype counts are bound per population at the sampled locus. The same formula 
 
 #Testing locus 5 at populations 1, 2, 3 
 
-gc_locus5 <- rbind(table(Pop_1$Genotype_Locus5), table(Pop_2$Genotype_Locus5), table(Pop_3$Genotype_Locus5))
-rownames(gc_locus5) <- c("Pop_1", "Pop_2", "Pop_3")
+gc_locus3 <- rbind(table(Pop_1$Genotype_Locus3), table(Pop_2$Genotype_Locus3), table(Pop_3$Genotype_Locus3))
+rownames(gc_locus3) <- c("Pop_1", "Pop_2", "Pop_3")
 
 #Checking table
 
-gc_locus5
+gc_locus3
 ```
 
 ```{r}
 
 #Defining frequencies for Locus 5
 
-fq_locus5 <- gc_locus5 / sum(gc_locus5)
-fq_locus5 <- round(fq_locus5, digits = 3)
-rownames(fq_locus5) <- c("Pop_1", "Pop_2", "Pop_3")
+fq_locus3 <- gc_locus3 / sum(gc_locus3)
+fq_locus3 <- round(fq_locus3, digits = 3)
+rownames(fq_locus3) <- c("Pop_1", "Pop_2", "Pop_3")
 
-fq_locus5
+fq_locus3
 
 
 ```
@@ -200,44 +200,44 @@ fq_locus5
 ```{r}
 #Homozygosity & Heterozygosity percentages
 
-#Locus 5
-HMP1L5 <- sum(gc_locus5[1,1] + gc_locus5[1,3]) / sum(gc_locus5[2,]) * 100
-HTP1L5 <- 100 - HMP1L5
-HMP1L5
-HTP1L5
-Pop1_HTHM <- cbind(HTP1L5, HMP1L5)
+#Locus 3
+HMP1L3 <- sum(gc_locus3[1,1] + gc_locus3[1,3]) / sum(gc_locus3[2,]) * 100
+HTP1L3 <- 100 - HMP1L3
+HMP1L3
+HTP1L3
+Pop1_HTHM <- cbind(HTP1L3, HMP1L3)
 Pop1_HTHM
 
-HMP2L5 <- sum(gc_locus5[2,1] + gc_locus5[2,3]) / sum(gc_locus5[3,]) * 100
-HTP2L5 <- 100 - HMP2L5
-HMP2L5
-HTP2L5
+HMP2L3 <- sum(gc_locus3[2,1] + gc_locus3[2,3]) / sum(gc_locus3[3,]) * 100
+HTP2L3 <- 100 - HMP2L3
+HMP2L3
+HTP2L3
 
-HMP3L5<- sum(gc_locus5[3,1] + gc_locus5[3,3]) / sum(gc_locus5[3,]) * 100
-HTP3L5 <- 100 - HMP3L5
-HTP3L5
-HMP3L5
-
-
-P_HTL5 <- c(HTP1L5, HTP2L5, HTP3L5)
-P_HTL5 <- round(P_HTL5, digits = 3)
+HMP3L3<- sum(gc_locus3[3,1] + gc_locus3[3,3]) / sum(gc_locus3[3,]) * 100
+HTP3L3 <- 100 - HMP3L3
+HTP3L3
+HMP3L3
 
 
-P_HML5 <- c(HMP1L5, HMP2L5, HMP3L5)
-P_HML5 <- round(P_HML5, digits = 3)
-
-P_HTL5
-P_HML5
+P_HTL3 <- c(HTP1L3, HTP2L3, HTP3L3)
+P_HTL3 <- round(P_HTL3, digits = 3)
 
 
-RBHHL5 <- rbind(P_HML5, P_HTL5)
-RBHHL5.1 <- cbind(P_HTL5, P_HML5)
+P_HML3 <- c(HMP1L3, HMP2L3, HMP3L3)
+P_HML3 <- round(P_HML3, digits = 3)
+
+P_HTL3
+P_HML3
 
 
-colnames(RBHHL5) <- c("Pop_1", "Pop_2", "Pop_3")
-rownames(RBHHL5) <- c("Homozygosity % ", "Heterozygosity %")
-RBHHL5
-RBHHL5.1
+RBHHL3 <- rbind(P_HML3, P_HTL3)
+RBHHL3.1 <- cbind(P_HTL3, P_HML3)
+
+
+colnames(RBHHL3) <- c("Pop_1", "Pop_2", "Pop_3")
+rownames(RBHHL3) <- c("Homozygosity % ", "Heterozygosity %")
+RBHHL3
+RBHHL3.1
 ```
 
 ### Expected and Observed allele freq
@@ -245,65 +245,65 @@ RBHHL5.1
 ```{r}
 #Observed allele frequencies at each sampled population: L11
 
-O_P2L11 <- c(p2o =  2 * (fq_locus11[1,2] + fq_locus11[1,3]) / (2 * n_indv))
-O_P2L11 <- round(O_P2L11, digits = 3)
-O_P2L11
-O_Q2L11 <-c( 1 - O_P2L11 )
-O_Q2L11 <- round(O_Q2L11, digits = 3)
-O_Q2L11
+O_P2L3 <- c(p2o =  2 * (fq_locus3[1,2] + fq_locus3[1,3]) / (2 * n_indv))
+O_P2L3 <- round(O_P2L3, digits = 3)
+O_P2L3
+O_Q2L3 <-c( 1 - O_P2L3 )
+O_Q2L3 <- round(O_Q2L3, digits = 3)
+O_Q2L3
 
-O_P3L11 <- c(p3o =  2 * (fq_locus11[2,2] + fq_locus11[2,3]) / (2 * n_indv))
-O_P3L11 <- round(O_P3L11, digits = 3)
-O_P3L11
-O_Q3L11 <-c( 1 - O_P3L11 )
-O_Q3L11 <- round(O_Q3L11, digits = 3)
-O_Q3L11
+O_P3L3 <- c(p3o =  2 * (fq_locus3[2,2] + fq_locus3[2,3]) / (2 * n_indv))
+O_P3L3 <- round(O_P3L3, digits = 3)
+O_P3L3
+O_Q3L3 <-c( 1 - O_P3L3 )
+O_Q3L3 <- round(O_Q3L3, digits = 3)
+O_Q3L3
 
-O_P4L11 <- c(p2o =  2 * (fq_locus11[3,2] + fq_locus11[3,3]) / (2 * n_indv))
-O_P4L11 <- round(O_P4L11, digits = 3)
-O_P4L11
-O_Q4L11 <-c( 1 - O_P4L11 )
-O_Q4L11 <- round(O_Q4L11, digits = 3)
-O_Q4L11
+O_P4L3 <- c(p2o =  2 * (fq_locus3[3,2] + fq_locus3[3,3]) / (2 * n_indv))
+O_P4L3 <- round(O_P4L3, digits = 3)
+O_P4L3
+O_Q4L3 <-c( 1 - O_P4L3 )
+O_Q4L3 <- round(O_Q4L3, digits = 3)
+O_Q4L3
 
-AOPFL11 <- cbind(O_P2L11, O_P3L11, O_P4L11)
-AOQFL11 <- cbind(O_Q2L11, O_Q3L11, O_Q4L11)
+AOPFL3 <- cbind(O_P2L3, O_P3L3, O_P4L3)
+AOQFL3 <- cbind(O_Q2L3, O_Q3L3, O_Q4L3)
 
-AOAFL11 <- rbind(AOPFL11, AOQFL11)
-colnames(AOAFL11) <- c("Population 2", "Population 3", "Population 4")
-rownames(AOAFL11) <- c("P Frequency", "Q Frequency")
-AOAFL11
+AOAFL3 <- rbind(AOPFL3, AOQFL3)
+colnames(AOAFL3) <- c("Population 2", "Population 3", "Population 4")
+rownames(AOAFL3) <- c("P Frequency", "Q Frequency")
+AOAFL3
 
 #Expected allele frequencies
-E_P2L11 <- c(p =  (2 * p_2 * q_2) / (2 * n_indv))
-E_P2L11 <- round(E_P2L11, digits = 3)
-E_P2L11
-E_Q2L11 <- c( 1 - E_P2L11)
-E_Q2L11 <- round(E_Q2L11, digits = 3)
-E_Q2L11
+E_P2L3 <- c(p =  (2 * p_2 * q_2) / (2 * n_indv))
+E_P2L3 <- round(E_P2L3, digits = 3)
+E_P2L3
+E_Q2L3 <- c( 1 - E_P2L3)
+E_Q2L3 <- round(E_Q2L3, digits = 3)
+E_Q2L3
 
-E_P3L11 <- c(p =  (2 * p_3 * q_3) / (2 * n_indv))
-E_P3L11 <- round(E_P3L11, digits = 3)
-E_P3L11
-E_Q3L11 <- c( 1 - E_P3L11)
-E_Q3L11 <- round(E_Q3L11, digits = 3)
-E_Q3L11
+E_P3L3 <- c(p =  (2 * p_3 * q_3) / (2 * n_indv))
+E_P3L3 <- round(E_P3L3, digits = 3)
+E_P3L3
+E_Q3L3 <- c( 1 - E_P3L3)
+E_Q3L3 <- round(E_Q3L3, digits = 3)
+E_Q3L3
 
-E_P4L11 <- c(p =  (2 * p_4 * q_4) / (2 * n_indv))
-E_P4L11 <- round(E_P4L11, digits = 3)
-E_P4L11
-E_Q4L11 <- c( 1 - E_P4L11)
-E_Q4L11 <- round(E_Q4L11, digits = 3)
-E_Q4L11
+E_P4L3 <- c(p =  (2 * p_4 * q_4) / (2 * n_indv))
+E_P4L3 <- round(E_P4L3, digits = 3)
+E_P4L3
+E_Q4L3 <- c( 1 - E_P4L3)
+E_Q4L3 <- round(E_Q4L3, digits = 3)
+E_Q4L3
 
 
-AEPFL11 <- cbind(E_P2L11, E_P3L11, E_P4L11)
-AEQFL11 <- cbind(E_Q2L11, E_Q3L11, E_Q4L11)
+AEPFL3 <- cbind(E_P2L3, E_P3L3, E_P4L3)
+AEQFL3 <- cbind(E_Q2L3, E_Q3L3, E_Q4L3)
 
-AEAFL11 <- rbind(AEPFL11, AEQFL11)
-colnames(AEAFL11) <- c("Population 2", "Population 3", "Population 4")
-rownames(AEAFL11) <- c("P Frequency", "Q Frequency")
-AEAFL11
+AEAFL3 <- rbind(AEPFL3, AEQFL3)
+colnames(AEAFL3) <- c("Population 2", "Population 3", "Population 4")
+rownames(AEAFL3) <- c("P Frequency", "Q Frequency")
+AEAFL3
 ```
 
 ### Expected and Observed Heterozygosity
@@ -313,33 +313,33 @@ Below I calculated expected and observed heterozygosity between each population 
 ```{r}
 #Expected at each population for Locus 11
 
-EHZP1L5 <- c(Aa =  2 * p_1 * q_1)
-EHZP1L5 
+EHZP1L3 <- c(Aa =  2 * p_1 * q_1)
+EHZP1L3 
 
-EHZP2L5 <- c(Aa =  2 * p_2 * q_2)
-EHZP2L5 
+EHZP2L3 <- c(Aa =  2 * p_2 * q_2)
+EHZP2L3 
 
-EHZP3L5 <- c(Aa =  2 * p_3 * q_3)
-EHZP3L5 
+EHZP3L3 <- c(Aa =  2 * p_3 * q_3)
+EHZP3L3 
 
-AEHZL5 <- rbind(EHZP1L5, EHZP2L5, EHZP3L5)
+AEHZL3 <- rbind(EHZP1L3, EHZP2L3, EHZP3L3)
 
-AEHZL5
+AEHZL3
 
 
 #Observed
-OHZP1L5 <- c(Aa =  fq_locus5[1,2])
-OHZP1L5 
+OHZP1L3 <- c(Aa =  fq_locus3[1,2])
+OHZP1L3 
 
-OHZP2L5 <- c(Aa =  fq_locus5[2,2])
-OHZP2L5 
+OHZP2L3 <- c(Aa =  fq_locus3[2,2])
+OHZP2L3 
 
-OHZP3L5 <- c(Aa =  fq_locus5[3,2])
-OHZP3L5 
+OHZP3L3 <- c(Aa =  fq_locus3[3,2])
+OHZP3L3 
 
-AOHZL5 <- rbind(OHZP1L5, OHZP2L5, OHZP3L5)
+AOHZL3 <- rbind(OHZP1L3, OHZP2L3, OHZP3L3)
 
-AOHZL5
+AOHZL3
 ```
 
 ### FIS Testing
@@ -371,11 +371,11 @@ Calculations for FIS
 par(mfrow = c(1,2))
 
 ylimgc <- c(0, 40)
-gc_locus5R <- round(gc_locus5, digits = 2)
+gc_locus3R <- round(gc_locus3, digits = 2)
 
-SPGCL5 <- barplot(gc_locus5, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Genotype Count", font.lab=1, ylim = ylimgc)
-colnames(SPGCL5) <- c("aa", "Aa", "AA")
-text(x = SPGCL5, y = gc_locus5, labels = gc_locus5R, adj = c(.5, -0.75), cex = .5, col = "black")
+SPGCL3 <- barplot(gc_locus3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Genotype Count", font.lab=1, ylim = ylimgc)
+colnames(SPGCL3) <- c("aa", "Aa", "AA")
+text(x = SPGCL3, y = gc_locus3, labels = gc_locus3R, adj = c(.5, -0.75), cex = .5, col = "black")
 
 plot.new()
 legend("center", legend = c("Pop1", "Pop2", "Pop3"), col = colors()[c(36, 12, 55)], lty = 1, bty = "n")
@@ -388,11 +388,11 @@ legend("center", legend = c("Pop1", "Pop2", "Pop3"), col = colors()[c(36, 12, 55
 par(mfrow = c(1,2))
 
 ylimfq <- c(0, 0.3)
-fq_locus5R <- round(fq_locus5, digits = 2)
+fq_locus3R <- round(fq_locus3, digits = 2)
 
-SPGFL5 <- barplot(fq_locus5, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Label", main = "Locus 5 Genotype Frequencies", font.lab=1, ylim = ylimfq)
-colnames(SPGFL5) <- c("aa", "Aa", "AA")
-text(x = SPGFL5, y = fq_locus5, labels = fq_locus5R, adj = c(.5, -0.75), cex = .5, col = "black")
+SPGFL3 <- barplot(fq_locus3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Label", main = "Locus 3 Genotype Frequencies", font.lab=1, ylim = ylimfq)
+colnames(SPGFL3) <- c("aa", "Aa", "AA")
+text(x = SPGFL3, y = fq_locus3, labels = fq_locus3R, adj = c(.5, -0.75), cex = .5, col = "black")
 
 plot.new()
 legend("center", legend = c("Pop1", "Pop2", "Pop3"), col = colors()[c(36, 12, 55)], lty = 1, bty = "n")
@@ -404,8 +404,8 @@ legend("center", legend = c("Pop1", "Pop2", "Pop3"), col = colors()[c(36, 12, 55
 ```{r}
 par(mfrow = c(1,2))
 
-SPHHL5 <- barplot(RBHHL5, col=colors()[c(36,12)], border = "white", font.axis = 1, ylab = "Percent", xlab = "Populations", main = "Locus 5: Homo & Heterozygosity % ", font.lab = 1) 
-text(x = SPHHL5, y = RBHHL5, labels = RBHHL5.1, adj = c(.5, -0.5), cex = .5, col = "black")
+SPHHL3 <- barplot(RBHHL3, col=colors()[c(36,12)], border = "white", font.axis = 1, ylab = "Percent", xlab = "Populations", main = "Locus 3: Homo & Heterozygosity % ", font.lab = 1) 
+text(x = SPHHL3, y = RBHHL3, labels = RBHHL3.1, adj = c(.5, -0.5), cex = .5, col = "black")
 
 
 plot.new()
@@ -415,21 +415,20 @@ legend("center", legend = c("Homozygous", "Heterozygous"), col = colors()[c(36, 
 ### Expected & Observed Allele Frequencies
 
 ```{r}
-{r}
 par(mfrow = c(1,2))
 ylimfqh <- c(0, 1.1)
 
-EAFBP <- barplot(AEAFL11, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Expected AF Locus11", font.lab=1, ylim = ylimfqh)
+EAFBP <- barplot(AEAFL3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Expected AF Locus3", font.lab=1, ylim = ylimfqh)
 #rownames(AEAFL11) <- c("P_p2", "QP2", "P_P3", "QP3", "P_P4", "QP4")
-text(x = EAFBP, y = AEAFL11, labels = AEAFL11, adj = c(.5, -0.5), cex = .75, col = "black")
+text(x = EAFBP, y = AEAFL3, labels = AEAFL3, adj = c(.5, -0.5), cex = .75, col = "black")
 
 plot.new()
 legend("center", legend = c("Pop2", "Pop3", "Pop4"), col = colors()[c(36, 12, 55)], lty = 1, bty = "n")
 
 par(mfrow = c(1,2))
-OAFBP <- barplot(AOAFL11, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ObsvLocus11_Hohz", font.lab=1, ylim = ylimfqh)
+OAFBP <- barplot(AOAFL3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ObsvLocus3_Hohz", font.lab=1, ylim = ylimfqh)
 #rownames(AOAFL11) <- c("Pop2", "Pop3", "Pop4")
-text(x = OAFBP, y = AOAFL11, labels = AOAFL11, adj = c(.5, -0.5), cex = .75, col = "black")
+text(x = OAFBP, y = AOAFL3, labels = AOAFL3, adj = c(.5, -0.5), cex = .75, col = "black")
 
 
 plot.new()
@@ -443,13 +442,13 @@ legend("center", legend = c("Pop2", "Pop3", "Pop4"), col = colors()[c(36, 12, 55
 par(mfrow = c(1,3))
 ylimfqh <- c(0, 0.6)
 
-EHZBP <- barplot(AEHZL5, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ExpectedLocus11_hz", font.lab=1, ylim = ylimfqh)
-rownames(AEHZL5) <- c("Pop1", "Pop2", "Pop3")
-text(x = EHZBP, y = AEHZL5, labels = AEHZL5, adj = c(.5, -0.5), cex = .75, col = "black")
+EHZBP <- barplot(AEHZL3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ExpectedLocus3_hz", font.lab=1, ylim = ylimfqh)
+rownames(AEHZL3) <- c("Pop1", "Pop2", "Pop3")
+text(x = EHZBP, y = AEHZL3, labels = AEHZL3, adj = c(.5, -0.5), cex = .75, col = "black")
 
-OHZBP <- barplot(AOHZL5, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ObsvLocus5_Hohz", font.lab=1, ylim = ylimfqh)
-rownames(AOHZL5) <- c("Pop1", "Pop2", "Pop3")
-text(x = OHZBP, y = AOHZL5, labels = AOHZL5, adj = c(.5, -0.5), cex = .75, col = "black")
+OHZBP <- barplot(AOHZL3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ObsvLocus3_Hohz", font.lab=1, ylim = ylimfqh)
+rownames(AOHZL3) <- c("Pop1", "Pop2", "Pop3")
+text(x = OHZBP, y = AOHZL3, labels = AOHZL3, adj = c(.5, -0.5), cex = .75, col = "black")
 
 
 plot.new()
@@ -461,7 +460,7 @@ legend("center", legend = c("Pop1", "Pop2", "Pop3"), col = colors()[c(36, 12, 55
 Showing delineation...
 
 ```{r}
-par(mfrow = c(1,3))
+#par(mfrow = c(1,3))
 #boxplot(x)
 ```
 

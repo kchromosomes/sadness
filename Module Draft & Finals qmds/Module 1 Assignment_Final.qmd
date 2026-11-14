@@ -1,0 +1,128 @@
+---
+title: "Module One Assignment"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+## [Goals]{.underline}
+
+Generate sample populations and find allele and genotype frequencies. Interpret results.
+
+### Population 1
+
+```{r}
+set.seed(123)
+n_indv = 30
+n_loci = 10
+geno = matrix(sample(0:2, n_indv * n_loci, replace = TRUE, prob = c(0.4, 0.4,0.2)), nrow = n_indv, ncol = n_loci)
+rownames(geno) = paste0("ind", 1:n_indv)
+colnames(geno) = paste0("locus", 1:n_loci)
+geno[1:30, 1:10]
+alt_freq = colMeans(geno) / 2
+ref_freq = 1 - alt_freq
+data.frame(locus = names(alt_freq), alt_freq = round(alt_freq, 3), ref_freq = round(ref_freq, 3))
+```
+
+```{r}
+p_1 = 0.80
+q_1 = 1 - p_1
+Pop_1 = data.frame(population = "Pop_1", genotype = sample(c("AA", "Aa", "aa"), size = 30, replace = TRUE, prob = c(p_1^2, 2 * p_1 * q_1, q_1^2)))
+```
+
+```{r}
+slices <- c(63.3, 33.3, 3.3)
+lbls <- c("AA", "Aa", "aa")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct)
+lbls <- paste(lbls, "%")
+pie(slices, labels = lbls, col = rainbow(length(lbls)), main = "Population 1 Genotype Frequency")
+```
+
+### Population 2
+
+```{r}
+set.seed(123)
+n_indvB = 30
+n_loci = 10
+
+geno = matrix(sample(0:2, n_indvB  * n_loci, replace = TRUE, prob = c(0.4, 0.4,0.2)), nrow = n_indvB, ncol = n_loci)
+
+rownames(geno) = paste0("ind", 1:n_indvB)
+colnames(geno) = paste0("locus", 1:n_loci)
+
+geno[1:30, 1:10]
+head(geno)
+alt_freq = colMeans(geno) / 2
+ref_freq = 1 - alt_freq
+
+# Create Pop 2 df
+# Pop_2 <-data.frame(locus = names(alt_freq), alt_freq = round(alt_freq, 3), ref_freq = round(ref_freq, 3))
+```
+
+```{r}
+p_1 = 0.60
+q_1 = 1 - p_1
+Pop_2 = data.frame(population = "Pop_2", genotype = sample(c("AA", "Aa", "aa"), size = 30, replace = TRUE, prob = c(p_1^2, 2 * p_1 * q_1, q_1^2)))
+
+```
+
+```{r}
+slices <- c(53.3, 33.3, 13.3)
+lbls <- c("AA", "Aa", "aa")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct)
+lbls <- paste(lbls, "%")
+
+pie(slices, labels = lbls, col = rainbow(length(lbls)), main = "Population 2 Genotype Frequency")
+```
+
+### Genotype Frequencies
+
+```{r}
+#Calculating geno freq's
+geno_count_pop1 = table(Pop_1$genotype)
+geno_count_pop2 = table(Pop_2$genotype)
+geno_count_pop1
+geno_count_pop2
+
+```
+
+```{r}
+#Converting geno counts to frequencies
+geno_prop_Pop1 = prop.table(table(Pop_1$genotype))
+geno_prop_Pop2 = prop.table(table(Pop_2$genotype))
+geno_prop_Pop1
+geno_prop_Pop2
+```
+
+### Binding Populations
+
+```{r}
+
+
+# get the structure of the populations
+str(Pop_1)
+
+# dim
+dim(Pop_1)
+
+dim(Pop_2)
+head(Pop_2)
+
+# pooling the populations with rbind()
+pooled <- rbind(Pop_1, Pop_2)
+dim(pooled)
+
+# cbind
+
+test_pop <- cbind(Pop_1,  Pop_2, pooled)
+```
+
+### [Observations]{.underline}
+
+Each of the populations experiences different allele frequencies due to the parameters set. Due to these set parameters, population 1 has the same degree of heterozygosity as population 2, despite population 1 having higher frequency of the p allele (A). To account for the change in frequencies, population 2 has a higher degree of homozygosity of the alternative allele.
+
+Although these are artificially sampled, utilizing set seed and having randomized generative results results in data that is free from sampling biases that can occur in the field. This allows for purely interpreting results in a way to assume nothing that is generated will point towards an inbreeding, non-randomly-mating-system, which aligns with HW theory. 30 individuals per population seems like an adequate number to generate enough data to observe any patterns and model the variables set.
+
+With pooling the data, I am able to see all of the populations at once. cbind will combine the columns so that the data in each column can be presented in a consistent way, while rbind does the same thing with rows in a table. The way that c(bind) is currently working is a bit abnormal though, since it is repeating a data set within the pooled table. This could be problematic in future iterations and lead to misinterpreting results. Anoob mentioned that this may be a new way that r-studio presents data but we will need to trouble-shoot to avoid this in future scenarios.
