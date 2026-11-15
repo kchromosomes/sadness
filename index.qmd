@@ -1,5 +1,5 @@
 ---
-title: "sadness=)"
+title: "sadness"
 ---
 
 QMD Files for Assignments 
@@ -7,7 +7,7 @@ QMD Files for Assignments
 Modules
 
 
-1. [Module 1: Alelle Frequencies](/Module Draft & Finals qmd/)
+1. [*Module 1: Alelle Frequencies](~Github/Sadness/Module Draft & Finals qmd/Module 1 Assignment_Final.qmd)
 
 2. [Module 2: Heterozygosity](/Module Draft & Finals qmd/)
 
@@ -21,7 +21,7 @@ Modules
 Lab Assignments
 
 
-1.[*Lab 1] (//Module Draft & Finals qmd/Lab R Assignment 1.qmd)
+1.[*Lab 1] (/Module Draft & Finals qmd/Lab R Assignment 1.qmd)
 
 2. [Lab 2:](/Module Draft & Finals qmd/]
 

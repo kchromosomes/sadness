@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "sadness=)"
+  title: "sadness"
   navbar:
     right:
       - href: index.qmd
