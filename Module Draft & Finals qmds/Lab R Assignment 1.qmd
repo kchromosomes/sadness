@@ -1,0 +1,197 @@
+# Lab: R Module 1 
+
+```{r}
+
+library(ggplot2)
+library()
+
+#Create all needed directories & download file into specified folder 
+
+#dir.create("data/raw", recursive = TRUE, showWarnings = FALSE) dir.create(here::here("results"), showWarnings = FALSE) dir.create(here::here("src"), showWarnings = FALSE)
+```
+
+#### You wouldn't download a car....
+
+```{r}
+download.file("https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt", destfile = "data/raw/red_spruce_fitness_traits.txt")
+
+#defining traits as the data file, so that the shorthand (traits) refers to the data within the file 
+
+traits <- read.delim(here::here("data/raw/red_spruce_fitness_traits.txt"), header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+#counting dimensions & checking variables to make sure data is being read properly. 
+
+dim(traits) 
+names(traits) 
+head(traits, 5)
+
+#Getting values of data, height specifically
+
+summary(traits$Height)
+```
+
+### Exercises
+
+```{r}
+#E2
+str(traits)
+
+#E3
+table(traits$Population)
+table(traits$Region)
+
+```
+
+### Assignment: Computing summary stats for 4 traits broken down by population and region
+
+```{r}
+summary((tapply(traits$Survival, traits$Region)), na.rm = TRUE)
+
+summary((tapply(traits$Genetic_Diversity, traits$Population)), na.rm = TRUE)
+
+summary((tapply(traits$Genetic_Diversity, traits$Region)), na.rm = TRUE)
+
+summary((tapply(traits$Germination, traits$Population)), na.rm = TRUE)
+
+summary((tapply(traits$Germination, traits$Region)), na.rm = TRUE)
+
+summary((tapply(traits$Fitness, traits$Population)), na.rm = TRUE)
+
+summary((tapply(traits$Fitness, traits$Region)), na.rm = TRUE)
+```
+
+### Producing figures
+
+```{r}
+
+#Histogram 
+
+hist(traits$Survival, main = "Survival Distribution", xlab = "Rate of Survival", breaks = 30)
+
+#box-plots (per chosen variable, out of curiosity
+boxplot(Fitness ~ Region, data = traits, main = "Fitness by Region", ylab = "Fitness", pch = 19)
+
+boxplot(Survival ~ Region, data = traits, main = "Survival by Region", ylab = "Survival", pch = 19)
+
+boxplot(Genetic_Diversity ~ Region, data = traits, main = "Genetic Diversity by Region", ylab = "GenDiverse", pch = 19)
+
+boxplot(Germination ~ Region, data = traits, main = "Germination by Region", ylab = "Germination :)", pch = 19)
+```
+
+### Scatter-plot w/trend lines 
+
+```{r}
+plot(traits$Germination, traits$Survival, xlab = "Germination", ylab = "Survival", main = "Germination Rates vs Survival Rates", abline(lm(Germination ~ Germination, data = traits), col = "maroon", lwd = 2))
+
+plot(traits$Genetic_Diversity, traits$Fitness, xlab = "Gen Diversity", ylab = "Fitness", main = "Genetic Diversity vs Fitness Rates", abline(lm(Fitness ~ Genetic_Diversity, data = traits), col = "maroon", lwd = 2)) 
+
+#more funky graphs. Would the data need to be transformed? How do you pick which is best? Is this where skewness & kurtosis comes into play?
+
+#Scatter-plots for the factors you asked about (Elevation, Fitness or Seed weight) 
+
+plot(traits$Elevation, traits$Fitness, xlab = "Elevation", ylab = "Fitness", main = "Elevation vs Fitness Rates", abline(lm(Elevation ~ Fitness, data = traits), col = "maroon", lwd = 2))
+
+plot(traits$SeedWeight, traits$Fitness, xlab = "Seed Weight", ylab = "Fitness", main = "Seed Weight vs Fitness Rates", abline(lm(SeedWeight ~ Fitness, data = traits), col = "maroon", lwd = 2))
+
+plot(traits$Elevation, traits$Fitness, xlab = "Elevation", ylab = "SeedWeight", main = "Elevation vs SeedWeight", abline(lm(Elevation ~ SeedWeight, data = traits), col = "maroon", lwd = 2))
+
+#I'm not sure why the trend line isn't showing for the 1st & 3rd chart
+
+#Trying out a fitted GGplot for untransformed data 
+#ggplot(data = traits, aes(x = Genetic_Diversity, y = Fitness)) + geom_point() + geom_smooth(method = "loess", se = TRUE, level = 0.95) + scale_color_brewer (palette = "Dark2") + theme_classic() + xlab("Genetic Diversity") + ylab("Fitness") + labs(title = "Fitted Fitness & Genetic Diversity") 
+
+#...ggplot not loading properly
+
+pop_summary <- (cbind(traits$Germination, traits$Genetic_Diversity, traits$Fitness, traits$Survival, traits$Population))
+
+pop_summary
+
+summary(pop_summary)
+
+#sub-sets & arrangement BUT doesn't work due to missing default. 
+
+#sorted_fitness <-pop_summary[order(pop_summary$fitness,)]
+
+#sorted_fitness
+
+#Note: November 15
+#Need to reconfigure the last two lines of code. I think some portions got lost when changing file type..
+
+
+#Saving... 
+
+write.csv(pop_summary, here::here("results/R_module 1_population_trait_summary.csv"), row.names = FALSE)
+```
+
+### exporting plot as a .png
+
+```{r}
+
+#png
+#(here::here("results/Genetic_Diversity_by_Region.png"), width = 800, height = 600) boxplot(Genetic_Diversity ~ Region, data = traits) dev.off()
+```
+
+################################################################################################ 
+
+## Idea-check responses
+
+1.  What is the difference between vector and a
+    data-frame in R?
+    1.  Vectors are 1 dimensional columns where
+        all elements have to be homogeneous #or
+        the same type of variable whether its
+        numeric or a character. A data-frame is a
+        way #to present this information . Each
+        column acts as a vector, but they have to
+        be #the same size. Data-frames can have
+        heterogeneous data, so they can contain
+        numbers and characters.
+2.  Why prefer a relative path over an absolute
+    path?
+    1.  This allows others to run your code
+        successfully, without having to edit file
+        paths or break file links. Absolute paths
+        are user-centric whereas relative paths
+        can be used by otherss when they run your
+        code locally on their device or on a
+        shared space such as the cluster.
+3.  What does str(traits) tell you that
+    head(traits) doesn't?
+    1.  str() will show the name of the column(s)
+        whereas head() will show what the actual
+        file's rows say. It is useful to check
+        both in case R misreads the file and shows
+        the name of the column incorrectly. This
+        can help show if data needs to be
+        rearranged within the file itself for R to
+        read it properly.
+4.  Why does treating Region as a factor matter
+    for boxplot(Height \~ Region, data = traits)
+    1.  Treating Region as a factor allows the
+        function to work, since it requires
+        numerical data. I think that keeping
+        Region as a character wouldn't be
+        compatible with this function.
+5.  If mean(traits\$height) returned NA, what
+    would you check first & how would you fix it?
+    1.  I could review the column to have
+        sums(is.na(x)) count the amount of NAs in
+        that part of the data. to prevent this
+        from interfering with the function again,
+        I can add rm.na = TRUE to tell R to ignore
+        thesevalues and only work with the ones
+        present
+
+## Assignment Answers
+
+1.  Which population has the highest and lowest
+    mean fitness?
+    1.  Population G18 has the highest mean
+        fitness, at 25.53 & population XWS has the
+        lowest mean fitness value at 2.18!
+2.  Is there a visible relationship between
+    elevation and fitness or seed weight?
+    1.  #...not sure. Having issues with
+        scatter-plots trend line showing up and
+        ggplot isn't loading correctly on posit
+        cloud
