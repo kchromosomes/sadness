@@ -2,28 +2,28 @@
 title: "sadness"
 ---
 
-QMD Files for Assignments 
+Assignments 
 
 Modules
 
 
-1. [*Module 1: Alelle Frequencies](~Github/Sadness/Module Draft & Finals qmd/Module 1 Assignment_Final.qmd)
+1. [Module 1: Alelle Frequencies](/GitHub/sadness/Assignments/Module 1 Final.qmd)
 
-2. [Module 2: Heterozygosity](/Module Draft & Finals qmd/)
+2. [Module 2: Heterozygosity](~/GitHub/sadness/Assignments)
 
-3. [*Module 3: FST & Lineage Simulation](/Module Draft & Finals qmd/Module 3 Official Draft.qmd)
+3. [*Module 3: FST & Lineage Simulation](~/GitHub/sadness/Assignments)
 
-4. [*Module 4: Population Comparisons & IRL Data Analysis](/Module Draft & Finals qmd/Module 4 Official Draft.qmd)
+4. [*Module 4: Population Comparisons & IRL Data Analysis](~Github/Sadness/Assignments/Module 4 Official Draft.qmd)
 
-5. [Module 5: Analyzing Human Genome-Scale Data]
+5. [Module 5: Analyzing Human Genome-Scale Data](~Github/Sadness/Assignments/)
 
 
 Lab Assignments
 
 
-1.[*Lab 1] (/Module Draft & Finals qmd/Lab R Assignment 1.qmd)
+1.[*Lab 1] (/~Github/Sadness/Assignments/Lab R Assignment 1.qmd)
 
-2. [Lab 2:](/Module Draft & Finals qmd/]
+2. [Lab 2:](~Github/Sadness/Assignments/)
 
 
 Reports

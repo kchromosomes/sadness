@@ -1,0 +1,283 @@
+---
+title: "Module 2: Official Draft"
+format: html
+editor: visual
+---
+
+# All Code Chunks
+
+### Setting up Populations
+
+Below are some parameters for setting up the populations.
+
+```{r}
+set.seed(123)
+n_indv <- 45
+n_loci <- 15
+n_pop <- 3
+n_rsloci <- 5
+```
+
+### Defining Populations
+
+There will be five generated populations each with unique allele frequencies defined by me.
+
+Note: The names for individuals in the populations are based alphabetically, rather than numerically (ex, Indv_A.1 vs Indv_1.1)
+
+```{r}
+#Population 1
+p_1 <- 0.6
+q_1 <- 1 - p_1
+Pop_1 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_1^2, 2 * p_1 * q_1, q_1^2)),nrow = n_indv,ncol = n_loci))
+rownames(Pop_1) <- paste0("Indv_A.", 1:n_indv)
+colnames(Pop_1) <- paste0("Genotype_Locus", 1:n_loci)
+
+
+#Population 2
+p_2 <- 0.2
+q_2 <- 1 - p_2
+
+Pop_2 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_2^2, 2 * p_2 * q_2, q_2^2)),nrow = n_indv,ncol = n_loci))
+rownames(Pop_2) <- paste0("Indv_B.", 1:n_indv)
+colnames(Pop_2) <- paste0("Genotype_Locus", 1:n_loci)
+
+#Population 3
+p_3 <- 0.9
+q_3 <- 1 - p_3
+Pop_3 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_3^2, 2 * p_3 * q_3, q_3^2)),nrow = n_indv,ncol = n_loci))
+rownames(Pop_3) <- paste0("Indv_C.", 1:n_indv)
+colnames(Pop_3) <- paste0("Genotype_Locus", 1:n_loci)
+
+#Population 4
+p_4 <- 0.5
+q_4 <- 1 - p_4
+Pop_4 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_4^2, 2 * p_4 * q_4, q_4^2)),nrow = n_indv,ncol = n_loci))
+rownames(Pop_4) <- paste0("Indv_D.", 1:n_indv)
+colnames(Pop_4) <- paste0("Genotype_Locus", 1:n_loci)
+
+#Population 5
+p_5 <- 0.7
+q_5 <- 1 - p_5
+Pop_5 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_5^2, 2 * p_5 * q_5, q_5^2)),nrow = n_indv,ncol = n_loci))
+rownames(Pop_5) <- paste0("Indv_E", 1:n_indv)
+colnames(Pop_5) <- paste0("Genotype_Locus", 1:n_loci)
+
+head(Pop_1)
+head(Pop_2)
+head(Pop_3)
+head(Pop_4)
+head(Pop_5)
+```
+
+### Randomized Sampling
+
+Although I will be working with this generated data for future modules, I want to base each individual modules on randomly selected loci. I also selected 3 random populations to work with for this module.
+
+```{r}
+
+sample(Pop_1, 1)
+sample(n_pop,3)
+
+```
+
+### Genotype Counts and Frequencies
+
+Genotype counts are bound per population at the sampled locus. The same formula is used for defining and binding each population's genotype frequencies.
+
+```{r}
+#Binding genotype counts per population
+
+gc_locus11 <- rbind(table(Pop_2$Genotype_Locus11), table(Pop_3$Genotype_Locus11), table(Pop_4$Genotype_Locus11))
+rownames(gc_locus11) <- c("Pop_2", "Pop_3", "Pop_4")
+
+#Checking table
+
+gc_locus11
+```
+
+```{r}
+
+#Defining frequencies for Locus 11
+
+fq_locus11 <- gc_locus11 / sum(gc_locus11)
+fq_locus11 <- round(fq_locus11, digits = 3)
+rownames(fq_locus11) <- c("Pop_2", "Pop_3", "Pop_4")
+
+fq_locus11
+
+
+```
+
+### Calculating Heterozygosity and Homozygosity
+
+```{r}
+#Homozygosity & Heterozygosity percentages
+
+#Locus 11 
+HMP2L11 <- sum(gc_locus11[1,1] + gc_locus11[1,3]) / sum(gc_locus11[2,]) * 100
+HTP2L11 <- 100 - HMP2L11
+HMP2L11
+HTP2L11
+Pop2_HTHM <- cbind(HTP2L11, HMP2L11)
+Pop2_HTHM
+
+HMP3L11 <- sum(gc_locus11[2,1] + gc_locus11[2,3]) / sum(gc_locus11[3,]) * 100
+HTP3L11 <- 100 - HMP3L11
+HMP3L11
+HTP3L11
+
+HMP4L11 <- sum(gc_locus11[3,1] + gc_locus11[3,3]) / sum(gc_locus11[3,]) * 100
+HTP4L11 <- 100 - HMP4L11
+HTP4L11
+HMP4L11
+
+
+P_HTL11 <- c(HTP2L11, HTP3L11, HTP4L11)
+P_HTL11 <- round(P_HTL11, digits = 3)
+
+P_HML11 <- c(HMP2L11, HMP3L11, HMP4L11)
+P_HML11 <- round(P_HML11, digits = 3)
+
+P_HTL11
+P_HML11
+
+
+RBHHL11 <- rbind(P_HML11, P_HTL11)
+RBHHL11.1 <- cbind(P_HTL11, P_HML11)
+
+
+colnames(RBHHL11) <- c("Pop_2", "Pop_3", "Pop_4")
+rownames(RBHHL11) <- c("Homozygosity % ", "Heterozygosity %")
+RBHHL11
+RBHHL11.1
+```
+
+```         
+```
+
+### Expected and Observed Heterozygosity Frequency
+
+Below I calculated expected and observed heterozygosity between each population at locus one. Observed data based on the averages from generated population and expected data based on originally set allele frequency values.
+
+```{r}
+#Data for each sampled population at Locus 11
+#Observed
+#Ho = # of heterozygous individuals / total individuals
+
+OHZP2L11 <- c(gc_locus11[1,2] / 45)
+OHZP2L11 <- round(OHZP2L11, digits = 3)
+OHZP2L11
+ 
+#The formula below parses out the same answer :) ey
+OHZP2L11 <- c(Op2_Aa =  2 * p_2 * q_2)
+OHZP2L11 
+
+OHZP3L11 <- c(Op3_Aa =  2 * p_3 * q_3)
+OHZP3L11
+
+OHZP4L11 <- c(Op4_Aa =  2 * p_4 * q_4)
+OHZP4L11 
+
+AOHZL11 <- cbind(OHZP2L11, OHZP3L11, OHZP4L11)
+AOHZL11
+
+
+#Expected HZ
+
+EHZP2L11 <- c(Ep2_Aa =  2 * (fq_locus11[1,2] + fq_locus11[1,3]))
+EHZP2L11 <- round(EHZP2L11, digits = 3)
+EHZP2L11
+
+
+EHZP3L11 <- c(Ep3_Aa =  2 * (fq_locus11[2,2] + fq_locus11[2,3]))
+EHZP3L11 <- round(OHZP3L11, digits = 3)
+EHZP3L11
+
+EHZP4L11 <- c(Ep4_Aa =  2 * (fq_locus11[3,2] + fq_locus11[3,3]))
+EHZP4L11 <- round(OHZP4L11, digits = 3)
+EHZP4L11
+
+AEHZL11 <- cbind(EHZP2L11, EHZP3L11, EHZP4L11)
+AEHZL11
+
+L11HZ <- rbind(AOHZL11, AEHZL11)
+colnames(L11HZ) <- c("Pop 2", "Pop 3", "Pop 4")
+rownames(L11HZ) <- c("Observed HZ", "Expected HZ")
+
+L11HZ
+
+```
+
+### Variable Glossary
+
+...
+
+# Figures
+
+### Genotype Counts
+
+```{r}
+#Grouped Graphs for Genotype Counts
+par(mfrow = c(1,2))
+
+ylimgc <- c(0, 40)
+gc_locus11R <- round(gc_locus11, digits = 2)
+
+SPGCL11 <- barplot(gc_locus11, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Genotype Count", font.lab=1, ylim = ylimgc)
+colnames(SPGCL11) <- c("aa", "Aa", "AA")
+text(x = SPGCL11, y = gc_locus11, labels = gc_locus11R, adj = c(.5, -0.75), cex = .5, col = "black")
+
+plot.new()
+legend("center", legend = c("Pop2", "Pop3", "Pop4"), col = colors()[c(36, 12, 55)], lty = 1, bty = "n")
+```
+
+### Genotype Frequencies
+
+```{r}
+#Grouped Graphs for Genotype Frequencies
+par(mfrow = c(1,2))
+
+ylimfq <- c(0, 0.3)
+fq_locus11R <- round(fq_locus11, digits = 2)
+
+SPGFL11 <- barplot(fq_locus11, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Label", main = "Locus 11 Genotype Frequencies", font.lab=1, ylim = ylimfq)
+colnames(SPGFL11) <- c("aa", "Aa", "AA")
+text(x = SPGFL11, y = fq_locus11, labels = fq_locus11R, adj = c(.5, -0.75), cex = .5, col = "black")
+
+plot.new()
+legend("center", legend = c("Pop2", "Pop3", "Pop4"), col = colors()[c(36, 12, 55)], lty = 1, bty = "n")
+
+```
+
+### Heterozygosity vs. Homozygosity
+
+```{r}
+par(mfrow = c(1,2))
+
+SPHHL11 <- barplot(RBHHL11, col=colors()[c(36,12)], border = "white", font.axis = 1, ylab = "Percent", xlab = "Populations", main = "Locus 11: Homo & Heterozygosity % ", font.lab = 1) 
+text(x = SPHHL11, y = RBHHL11, labels = RBHHL11.1, adj = c(.5, -0.5), cex = .5, col = "black")
+
+
+plot.new()
+legend("center", legend = c("Homozygous", "Heterozygous"), col = colors()[c(36, 12)], lty = 1, bty = "n")
+```
+
+### Expected & Observed Heterozygosity
+
+```{r}
+
+par(mfrow = c(1,2))
+ylimfqh <- c(0, 0.6)
+
+L11HZBP <- barplot(L11HZ, col=colors()[c(36, 12)], border = "white", font.axis = 1, beside = T, xlab="Locus11_Hohz", font.lab=1, ylim = ylimfqh)
+
+text(x = L11HZBP, y = L11HZ, labels = L11HZ, adj = c(.5, -0.5), cex = .75, col = "black")
+
+
+plot.new()
+legend("center", legend = c("Expected", "Observed"), col = colors()[c(36, 12)], lty = 1, bty = "n")
+```
+
+# Analysis
+
+# References
