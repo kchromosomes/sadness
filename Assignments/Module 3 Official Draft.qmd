@@ -388,7 +388,7 @@ E_Q2L7
 
 
 #Population 7
-E_P7L7 <- c(p =  (2 * p_2 * q_2) / (2 * n_indv))
+E_P7L7 <- c(p =  (2 * p_7 * q_7) / (2 * n_indv))
 E_P7L7 <- round(E_P2L7, digits = 3)
 E_P7L7
 E_Q7L7 <- c( 1 - E_P2L7)
@@ -482,6 +482,7 @@ DOQ_GDF <- sum(O_Q2L7 - O_Q7L7)
 #Comparision
 GDF_OAFL7 <- cbind(O_P2L7, O_P7L7,DOP_GDF, O_Q2L7, O_Q7L7, DOQ_GD)
 GDF_OAFL7
+
 
 #Population 3
 
@@ -707,10 +708,18 @@ legend("center", legend = c("Pop1", "Pop6"), col = colors()[c(36, 12)], lty = 1,
 ### Heterozygosity vs. Homozygosity
 
 ```{r}
+##########dont know why labels arent showin up right##############
 par(mfrow = c(1,2))
 
-SPHHL7 <- barplot(T_GD_HTL7, col=colors()[c(36,12)], border = "white", font.axis = 1, ylab = "Percent", xlab = "Populations", main = "Gen inbreed 7: Homo & Heterozygosity % ", font.lab = 1) 
-text(x = T_GD_HTL7, y = T_GD_HTL7, labels = T_GD_HTL7, adj = c(.5, -0.5), cex = .5, col = "black")
+ 
+Tgdbp1 <-c(57.78, 42.22)
+Tgdbp6 <- c(24.44, 75.56 )
+ylimtgd <- c(0,115)
+
+T_GD_HTL7.BP <- cbind(Tgdbp1, Tgdbp6)
+
+SPHHL7 <- barplot(T_GD_HTL7.BP, col=colors()[c(36,12)], border = "white", font.axis = 1, ylab = "Percent", xlab = "Populations", main = "Homo. & Het. of Pop 1 & 6", font.lab = 1, ylim = ylimtgd) 
+text(x = T_GD_HTL7.BP, y = T_GD_HTL7, labels = T_GD_HTL7, adj = c(.5, -0.5), cex = .8, col = "black")
 
 
 plot.new()
@@ -723,41 +732,38 @@ legend("center", legend = c("Homozygous", "Heterozygous"), col = colors()[c(36, 
 par(mfrow = c(1,2))
 ylimfqh <- c(0, 1.1)
 
-EAFBP <- barplot(AEAFL3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Expected AF Locus3", font.lab=1, ylim = ylimfqh)
+OAFBP <- barplot(GD_OAFL7, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="Expected AF Locus7", font.lab=1, ylim = ylimfqh)
 #rownames(AEAFL11) <- c("P_p2", "QP2", "P_P3", "QP3", "P_P4", "QP4")
-text(x = EAFBP, y = AEAFL3, labels = AEAFL3, adj = c(.5, -0.5), cex = .75, col = "black")
+text(x = OAFBP, y = GD_OAFL7, labels = GD_OAFL7, adj = c(.5, -0.5), cex = .75, col = "black")
 
 plot.new()
-legend("center", legend = c("Pop2", "Pop3", "Pop4"), col = colors()[c(36, 12, 55)], lty = 1, bty = "n")
+legend("center", legend = c("Pop1", "Pop6"), col = colors()[c(36, 12)], lty = 1, bty = "n")
 
 par(mfrow = c(1,2))
-OAFBP <- barplot(AOAFL3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ObsvLocus3_Hohz", font.lab=1, ylim = ylimfqh)
+EAFBP <- barplot(GDEAFL7, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ObsvLocus3_Hohz", font.lab=1, ylim = ylimfqh)
 #rownames(AOAFL11) <- c("Pop2", "Pop3", "Pop4")
-text(x = OAFBP, y = AOAFL3, labels = AOAFL3, adj = c(.5, -0.5), cex = .75, col = "black")
+text(x = EAFBP, y = GDEAFL7, labels = GDEAFL7, adj = c(.5, -0.5), cex = .75, col = "black")
 
 
 plot.new()
-legend("center", legend = c("Pop2", "Pop3", "Pop4"), col = colors()[c(36, 12, 55)], lty = 1, bty = "n")
+legend("center", legend = c("Pop1", "Pop6"), col = colors()[c(36, 12)], lty = 1, bty = "n")
 ```
 
 ### Expected and Observed Heterozygosity
 
 ```{r}
 
-par(mfrow = c(1,3))
-ylimfqh <- c(0, 0.6)
+par(mfrow = c(1,2))
+ylimfqh <- c(0, 1)
 
-EHZBP <- barplot(AEHZL3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ExpectedLocus3_hz", font.lab=1, ylim = ylimfqh)
-rownames(AEHZL3) <- c("Pop1", "Pop2", "Pop3")
-text(x = EHZBP, y = AEHZL3, labels = AEHZL3, adj = c(.5, -0.5), cex = .75, col = "black")
+EHZV <- matrix(cbind(EHZP1L7, OHZP1L7, EHZP6L7, OHZP6L7))
+rownames(EHZV) <- c("Pop1", "Pop6", "P1", "P6")
 
-OHZBP <- barplot(AOHZL3, col=colors()[c(36, 12, 55)], border = "white", font.axis = 1, beside = T, xlab="ObsvLocus3_Hohz", font.lab=1, ylim = ylimfqh)
-rownames(AOHZL3) <- c("Pop1", "Pop2", "Pop3")
-text(x = OHZBP, y = AOHZL3, labels = AOHZL3, adj = c(.5, -0.5), cex = .75, col = "black")
-
+EHZBP <- barplot(EHZV, col=colors()[c(36, 12, 55, 78)], border = "white", font.axis = 1, beside = T, xlab="ExpectedLocus7_hz", font.lab=1, ylim = ylimfqh)
+text(x = EHZBP, y = EHZBP, labels = EHZV, adj = c(.5, -0.5), cex = .75, col = "black")
 
 plot.new()
-legend("center", legend = c("Pop1", "Pop2", "Pop3"), col = colors()[c(36, 12, 55)], lty = 1, bty = "n")
+legend("center", legend = c("Expected P1", "ObservedP1", "ExpectedP6", "Observedp6"), col = colors()[c(36, 12, 55, 78)], lty = 1, bty = "n")
 ```
 
 ### Boxplots
@@ -765,8 +771,13 @@ legend("center", legend = c("Pop1", "Pop2", "Pop3"), col = colors()[c(36, 12, 55
 Showing delineation...
 
 ```{r}
-#par(mfrow = c(1,3))
-#boxplot(x)
+par(mfrow = c(1,3))
+boxplot(fq_GD)
+boxplot(fq_GDF)
+boxplot(fq_AFX)
+#These essentially just show that populations one and 6 have the most variation. 
+#How do things (F) change with using obsv instead of expected?
+
 ```
 
 ### Statistical Analysis
