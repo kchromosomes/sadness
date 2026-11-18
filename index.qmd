@@ -9,11 +9,11 @@ Modules
 
 1. [Module 1: Alelle Frequencies](/GitHub/sadness/Assignments/Module 1 Final.qmd)
 
-2. [Module 2: Heterozygosity](~/GitHub/sadness/Assignments)
+2. [Module 2: Heterozygosity](~/GitHub/sadness/Assignments/Module 2 Official Draft.qmd)
 
-3. [*Module 3: FST & Lineage Simulation](~/GitHub/sadness/Assignments)
+3. [Module 3: FST](~/GitHub/sadness/Assignments/Module 3 Official Draft.qmd)
 
-4. [*Module 4: Population Comparisons & IRL Data Analysis](~Github/Sadness/Assignments/Module 4 Official Draft.qmd)
+4. [Module 4: Population Comparisons & IRL Data Analysis](~Github/Sadness/Assignments/Module 4 Official Draft.qmd)
 
 5. [Module 5: Analyzing Human Genome-Scale Data](~Github/Sadness/Assignments/)
 

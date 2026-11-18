@@ -1,12 +1,14 @@
 ---
-title: "Module 3: Official Draft"
-format: html
+title: "Module 3: Draft"
+format: qmd
 editor: visual
 ---
 
 # All Code Chunks
 
-NOTES: Issues with population 2 gc_locus 5 rendering. Incorrect counts?
+```{r}
+library(dplyr)
+```
 
 ### Setting up Populations
 
@@ -17,7 +19,6 @@ set.seed(123)
 n_indv <- 45
 n_loci <- 15
 n_pop <- 3
-n_rsloci <- 5
 
 ```
 
@@ -76,10 +77,10 @@ Although I will be working with this generated data for future modules, I want t
 
 ```{r}
 
-sample(Pop_3, 1)
 sample(n_pop,3)
-
-sample(n_loci, 3)
+#Sampling populations 1, 2, & 3
+sample(n_loci, 1)
+#Sampling Locus 7
 ```
 
 ### Defining Deviated Populations
@@ -87,82 +88,81 @@ sample(n_loci, 3)
 These are generated populations each with unique allele frequencies defined by me to simulate deviations from HWE, such as habitat fragmentation, genetic migration and inbreeding.
 
 ```{r}
+#Population 6: Mirrors Population 1 but shows consequences of inbreeding
+
+#The inbreeding co-efficient  (F) is "The probability that an individual has two alleles at a locus that are identical by descent, ranging from 0 (non-inbred) to 1 (completely inbred). Since it reflects the degree of inbreeding in a population, it influences the frequency and homozygotes and heterozygotes."
+#FIS: INBREEDING WITHIN A SINGLE SUB-POPULAITON
+
+# Pedigree F = (sum) (1/2 ^ (n + n' + 1 )) * 1 + Fa
+#Fa is the inbreeding coefficient of an ancestor and n and n' are the number of generations from each parent to the common ancestor.
+
+#F(ROH) is the genomic F; which is obtained by assessing runs of homozygosity. Actual autozygosty can vary to a wider degree than the pedigree expected average. 
+#Offspring of self-fertilization F = 0.50. 
+#Offspring of full-siblings or parent-offspring F = 0.25
+#Offspring of half-siblings F = 0.125(1-F)
+#Offspring of first cousings F = 0.0625 
+#Negative Assortive mating results in a negative Fis value which increases heterozygosity 
+#Genetic drift or inbreednig effect of small populations shows that all individuals of a small population eventually become related over time, which increases the population's average Fst, leading to a gradual loss of heterozygosity. 
 
 
-#Population 6: Mirrors Population 1 but shows consequences of inbreeding after x generations
-
-n.sindv <-10
-n_sloci <-3
-p_6 <- 0.6 
-q_6 <- 1 - p_6 
-Pop_6 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n.sindv * n_sloci, replace = TRUE,prob = c(p_6^2, 2 * p_6 * q_6, q_6^2)),nrow = n.sindv, ncol = n_sloci)) 
-rownames(Pop_6) <- paste0("Indv_A.", 1:n.sindv) 
-#colnames(Pop_6) <- paste0(Pop_6$X3, Pop_6$X7, Pop_6$X9)   
+#Introducing the F-value within the genotype (?) frequency equation looks like: 
+#Since inbreeding redistributes genotypes, allele frequencies themselves do not change. 
+#Homo A' = p^2 + pF (or, p^2 + pqF)
+#homo A = q^2 + pqF
+#heterozygote: 2pq(1-F)
+F_valuesP6 <- c(0.0625, 0.125, 0.25, 0.5)
+F_p6 <- sample(F_valuesP6, 1)
+F_p6
+F_p6 <- 0.5
+p_1 <- 0.6 
+q_1 <- 1 - p_1 
+Pop_6 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_1^2, ((2 * p_1 * q_1) * (1 - F_p6)), q_1^2)),nrow = n_indv, ncol = n_loci)) 
+rownames(Pop_6) <- paste0("Indv_F.", 1:n_indv) 
+colnames(Pop_6) <- paste0("Genotype_Locus", 1:n_loci)
 Pop_6
 
+
+
+
+
 #Population 7: Mirrors Population 2 but shows consequences of genetic drift after x generations
-#p_1 <- 0.6 
-#q_1 <- 1 - p_1 
-#Pop_1 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_1^2, 2 * p_1 * q_1, q_1^2)),nrow = n_indv,ncol = n_loci)) 
-#rownames(Pop_1) <- paste0("Indv_A.", 1:n_indv) 
-#colnames(Pop_1) <- paste0("Genotype_Locus", 1:n_loci)   
+#FST: INBREEDING BETWEEN SUBPOPULATIONS
+#FIT: INBREEDING ACROSS THE WHOLE POPULATION
 
-#Population 8: Mirrors Population 3 but shows consequences of fixation after x generations
-#p_1 <- 0.6 
-#q_1 <- 1 - p_1 
-#Pop_1 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_1^2, 2 * p_1 * q_1, q_1^2)),nrow = n_indv,ncol = n_loci)) 
-#rownames(Pop_1) <- paste0("Indv_A.", 1:n_indv) 
-#colnames(Pop_1) <- paste0("Genotype_Locus", 1:n_loci)   
+#Heterozygous affect 2(pq)(1-Fst)
+#pq in above equations have little hats, basically the same as population 6's equation but fashionable
+#values of 0.00-0.05 show little to no drift. There is high gene flow
+#values of 0.05-0.15 show moderate, ongoing genetic drift in partially isolated subpopulations with limited gene flow
+#values of 0.15-0.25 shows strong genetic drift and polonged isolation; sub-populations have noticably diverged in allele frequencies
+#values greater then 0.25 show severe-drift or near coplete isolation. Subpopulations are approachinng fixation for different alleles (FST = 1.0 for complete fixation)
 
-#could also show founder effect, maybe. genetic migration may be  abit more difficult, requiring a random sampling of allele frequencies from a parental thingy with its own sampling thingies
+F_values_P7 <- c(0.05, 0.10, 0.15, 0.20, 0.25)
+Fst_p7 <- sample(F_values_P7, 1)
+Fst_p7
+#calculate p hat and q hat...
+p_2 <- 0.2
+q_2 <- 1 - p_2
+Pop_7 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_2^2, ((2 * p_2 * q_2) * (1 - F)), q_2^2)),nrow = n_indv,ncol = n_loci)) 
+rownames(Pop_7) <- paste0("Indv_G.", 1:n_indv) 
+colnames(Pop_7) <- paste0("Genotype_Locus", 1:n_loci)  
+Pop_7
+
+#Population 8: Mirrors Population 3 but shows consequences of fixation 
+
+F_values_P8 <- c(0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95)
+Fst_p8 <- sample(F_values_P8, 1)
+Fst_p8
+#need to calculate pq hat from pop3
+p_3 <- 0.9
+q_3 <- 1 - p_3
+Pop_8 <- data.frame(matrix(sample(c("AA", "Aa", "aa"), size = n_indv * n_loci, replace = TRUE,prob = c(p_3^2, 2 * p_3 * q_3, q_3^2)),nrow = n_indv,ncol = n_loci)) 
+rownames(Pop_8) <- paste0("Indv_H.", 1:n_indv) 
+colnames(Pop_8) <- paste0("Genotype_Locus", 1:n_loci)   
+
+
 ```
 
-### Randomized Sampling of Mirrored Populations
-
-```{r}
-#function foundations
-#beep boop
-#goal: use populations 6-8 to simulate biological processes that cause deviations from H-W
-#Looping sample function?
-
-#ten individuals per generation
-sample_size <- 10
-
-#number of generations?
-n_repeats <- 15
-
-#how to inplement factor of depreciation or fixation?
-
-#Population 6 generation list
-Pop_6_lineage <- vector("list", n_repeats)
-
-for (i in 1:n_repeats) {
-  Pop_6_lineage[[i]] <- Pop_6[sample(nrow(Pop_6), sample_size),]
-}
-
-# Print each sample
-for (i in 1:n_repeats) {
-  cat("Sample", i, ":\n")
-  print(Pop_6_lineage[[i]])
-  cat("\n")
-}
-
-
-#make things a matrix to take mean genotype frequency per generation and use these to make calculations 
-#Does this even count as a function? lol
-#make each sample a seperate table???
-
-#select randomized loci to work with for original and mirrored populations (so, i do need to introduce and definea  variable to show degradation, fixation, etc for the comparisons to make sense)
-#ugh
-#Pop_6_lineage <- cbind(table(Pop_6_lineage[1,]), table(Pop_6_lineage[2,]), table(Pop_6_lineage[3,]))
-#Pop_6_lineage <- data.frame(Pop_6_lineage)
-#Pop_6_lineage[order(Pop_6_lineage$)]
-#Pop_6_lineage
-#sample(Pop_6_lineage, 3)
-
-
-#use sampled loci and genotype frequency (means?) per generation to calculate deviations..
-
+```         
 ```
 
 ### Genotype Counts and Frequencies
@@ -172,27 +172,83 @@ Genotype counts are bound per population at the sampled locus. The same formula 
 ```{r}
 #Binding genotype counts per (original) population
 
-#Testing locus 5 at populations 1, 2, 3 
+#Testing locus 7 at populations 1, 2, 3 
 
-gc_locus3 <- rbind(table(Pop_1$Genotype_Locus3), table(Pop_2$Genotype_Locus3), table(Pop_3$Genotype_Locus3))
-rownames(gc_locus3) <- c("Pop_1", "Pop_2", "Pop_3")
+#genetic depression
+gd_locus7 <- rbind(table(Pop_1$Genotype_Locus7), table(Pop_6$Genotype_Locus7))
+rownames(gd_locus7) <- c("Pop_1", "Pop_6")
 
-#Checking table
+#genetic drift
+gdf_locus7 <- rbind(table(Pop_2$Genotype_Locus7), table(Pop_7$Genotype_Locus7))
+rownames(gdf_locus7) <- c("Pop_2", "Pop_7")
 
-gc_locus3
+#allele fixation
+afx_locus7 <- rbind(table(Pop_3$Genotype_Locus7), table(Pop_8$Genotype_Locus7))
+rownames(afx_locus7) <- c("Pop_3", "Pop_8")
+
+#Checking tables
+
+gd_locus7
+
+gdf_locus7
+
+afx_locus7
 ```
 
 ```{r}
-
-#Defining frequencies for Locus 5
-
-fq_locus3 <- gc_locus3 / sum(gc_locus3)
-fq_locus3 <- round(fq_locus3, digits = 3)
-rownames(fq_locus3) <- c("Pop_1", "Pop_2", "Pop_3")
-
-fq_locus3
+#Defining frequencies for Locus 7 
+#Genetic Depression
+#population 1
+fq_gdP1 <- gd_locus7[1,]/ sum(gd_locus7[1,])
+fq_gdP1 <- round(fq_gdP1, digits = 3)
 
 
+
+#Population 6
+fq_gdP6 <- gd_locus7[2,] / sum(gd_locus7[2,])
+fq_gdP6 <- round(fq_gdP6, digits = 3)
+
+fq_gdP6
+
+
+fq_GD <- rbind(fq_gdP1, fq_gdP6)
+fq_GD
+
+#Genetic Drift
+#Population 2
+
+fq_gdfP2 <- gdf_locus7[1,] / sum(gdf_locus7[1,])
+fq_gdfP2 <- round(fq_gdfP2, digits = 3)
+
+fq_gdfP2
+
+
+#Population 7
+fq_gdfP7 <- gdf_locus7[2,] / sum(gdf_locus7[2,])
+fq_gdfP7 <- round(fq_gdfP7, digits = 3)
+
+fq_gdfP7
+
+fq_GDF <- rbind(fq_gdfP2, fq_gdfP7)
+fq_GDF
+
+dim(fq_GDF)
+  
+#Fixation
+#Population 3
+fq_afxP3 <-  afx_locus7[1,] / afx_locus7[1,]
+fq_afxP3 <- round(fq_afxP3, digits = 3)
+
+fq_afxP3
+
+#Population 8
+fq_afxP8 <-  afx_locus7[2,] / afx_locus7[2,]
+afx_gcP8 <- round(fq_afxP8, digits = 5)
+
+fq_afxP8
+
+fq_AFX <- rbind(fq_afxP3, fq_afxP8)
+fq_AFX
 ```
 
 ### Calculating Heterozygosity and Homozygosity
@@ -200,110 +256,220 @@ fq_locus3
 ```{r}
 #Homozygosity & Heterozygosity percentages
 
-#Locus 3
-HMP1L3 <- sum(gc_locus3[1,1] + gc_locus3[1,3]) / sum(gc_locus3[2,]) * 100
-HTP1L3 <- 100 - HMP1L3
-HMP1L3
-HTP1L3
-Pop1_HTHM <- cbind(HTP1L3, HMP1L3)
-Pop1_HTHM
+#Genetic Inbreeding
+HMP1L7 <- sum(gd_locus7[1,1] + gd_locus7[1,3]) / sum(gd_locus7[1,]) * 100
+HTP1L7 <- 100 - HMP1L7
+HMP1L7
+HTP1L7
 
-HMP2L3 <- sum(gc_locus3[2,1] + gc_locus3[2,3]) / sum(gc_locus3[3,]) * 100
-HTP2L3 <- 100 - HMP2L3
-HMP2L3
-HTP2L3
+HMP6L7 <- sum(gd_locus7[2,1] + gd_locus7[2,3]) / sum(gd_locus7[2,]) * 100
+HTP6L7 <- 100 - HMP6L7
+HMP6L7
+HTP6L7
 
-HMP3L3<- sum(gc_locus3[3,1] + gc_locus3[3,3]) / sum(gc_locus3[3,]) * 100
-HTP3L3 <- 100 - HMP3L3
-HTP3L3
-HMP3L3
+GD_HTL7 <- c(HTP1L7, HTP6L7)
+GD_HTL7 <- round(GD_HTL7, digits = 3)
+GD_HTL7
 
+GD_HML7 <- c(HMP1L7, HMP6L7)
+GD_HML7 <- round(GD_HML7, digits = 3)
+GD_HML7
 
-P_HTL3 <- c(HTP1L3, HTP2L3, HTP3L3)
-P_HTL3 <- round(P_HTL3, digits = 3)
+T_GD_HTL7 <- cbind(GD_HTL7, GD_HML7)
 
-
-P_HML3 <- c(HMP1L3, HMP2L3, HMP3L3)
-P_HML3 <- round(P_HML3, digits = 3)
-
-P_HTL3
-P_HML3
+rownames(T_GD_HTL7) <- c("Pop_1", "Pop_6")
+colnames(T_GD_HTL7) <- c("Homozygosity % ", "Heterozygosity %")
+T_GD_HTL7
 
 
-RBHHL3 <- rbind(P_HML3, P_HTL3)
-RBHHL3.1 <- cbind(P_HTL3, P_HML3)
+#Genetic Drift
+
+HMP2L7 <-  sum(gdf_locus7[1,1] + gdf_locus7[1,3]) / sum(gdf_locus7[1,]) * 100
+HTP2L7 <- 100 - HMP2L7
+HMP2L7
+HTP2L7
+
+HMP7L7<-  sum(gdf_locus7[2,1] + gdf_locus7[2,3]) / sum(gdf_locus7[2,]) * 100
+HTP7L7 <- 100 - HMP7L7
+HTP7L7
+HMP7L7
+
+GDF_HTL7 <- c(HTP2L7, HTP7L7)
+GDF_HTL7 <- round(GDF_HTL7, digits = 3)
 
 
-colnames(RBHHL3) <- c("Pop_1", "Pop_2", "Pop_3")
-rownames(RBHHL3) <- c("Homozygosity % ", "Heterozygosity %")
-RBHHL3
-RBHHL3.1
+GDF_HML7 <- c(HMP1L7, HMP7L7)
+GDF_HML7 <- round(GDF_HML7, digits = 3)
+
+T_GDF_HTL7 <- cbind(GDF_HTL7, GDF_HML7)
+
+rownames(T_GDF_HTL7) <- c("Pop_2", "Pop_7")
+colnames(T_GDF_HTL7) <- c("Homozygosity % ", "Heterozygosity %")
+T_GDF_HTL7
+
+#Allele Fixation
+HMP3L7 <-  sum(0 + afx_locus7[1,2]) / sum(afx_locus7[1,]) * 100
+HTP3L7 <- 100 - HMP3L7
+HMP3L7
+HTP3L7
+
+HMP8L7<-  sum(0 + afx_locus7[2,2]) / sum(gd_locus7[2,]) * 100
+HTP8L7 <- 100 - HMP8L7
+HTP8L7
+HMP8L7
+
+
+AFX_HTL7 <- c(HTP3L7, HTP8L7)
+AFX_HTL7 <- round(AFX_HTL7, digits = 3)
+
+
+AFX_HML7 <- c(HMP3L7, HMP8L7)
+AFX_HML7 <- round(AFX_HML7, digits = 3)
+
+
+
+T_AFX_HTL7 <- cbind(AFX_HTL7, AFX_HML7)
+
+rownames(T_AFX_HTL7) <- c("Pop_3", "Pop_8")
+colnames(T_AFX_HTL7) <- c("Homozygosity % ", "Heterozygosity %")
+T_AFX_HTL7
+
+
+#colnames(RBHHL3) <- c("Pop_1", "Pop_2", "Pop_3")
+#rownames(RBHHL3) <- c("Homozygosity % ", "Heterozygosity %")
+#RBHHL3
+#RBHHL3.1
 ```
 
 ### Expected and Observed allele freq
 
 ```{r}
-#Observed allele frequencies at each sampled population: L11
+#Observed allele frequencies at each sampled population: L7
 
-O_P2L3 <- c(p2o =  2 * (fq_locus3[1,2] + fq_locus3[1,3]) / (2 * n_indv))
-O_P2L3 <- round(O_P2L3, digits = 3)
-O_P2L3
-O_Q2L3 <-c( 1 - O_P2L3 )
-O_Q2L3 <- round(O_Q2L3, digits = 3)
-O_Q2L3
+#Population 1
 
-O_P3L3 <- c(p3o =  2 * (fq_locus3[2,2] + fq_locus3[2,3]) / (2 * n_indv))
-O_P3L3 <- round(O_P3L3, digits = 3)
-O_P3L3
-O_Q3L3 <-c( 1 - O_P3L3 )
-O_Q3L3 <- round(O_Q3L3, digits = 3)
-O_Q3L3
+O_P1L7 <- c(p2o =  2 * (fq_GD[1,1] + fq_GD[1,3]) / (2 * n_indv))
+O_P1L7 <- round(O_P1L7, digits = 3)
+O_P1L7
+O_Q1L7 <-c( 1 - O_P1L7 )
+O_Q1L7 <- round(O_Q1L7, digits = 3)
+O_Q1L7
 
-O_P4L3 <- c(p2o =  2 * (fq_locus3[3,2] + fq_locus3[3,3]) / (2 * n_indv))
-O_P4L3 <- round(O_P4L3, digits = 3)
-O_P4L3
-O_Q4L3 <-c( 1 - O_P4L3 )
-O_Q4L3 <- round(O_Q4L3, digits = 3)
-O_Q4L3
+#Population 6
 
-AOPFL3 <- cbind(O_P2L3, O_P3L3, O_P4L3)
-AOQFL3 <- cbind(O_Q2L3, O_Q3L3, O_Q4L3)
+O_P6L7 <- c(p2o =  2 * (fq_GD[2,1] + fq_GD[2,3]) / (2 * n_indv))
+O_P6L7 <- round(O_P6L7, digits = 3)
+O_P6L7
+O_Q6L7 <-c( 1 - O_P6L7 )
+O_Q6L7 <- round(O_Q6L7, digits = 3)
+O_Q6L7
 
-AOAFL3 <- rbind(AOPFL3, AOQFL3)
-colnames(AOAFL3) <- c("Population 2", "Population 3", "Population 4")
-rownames(AOAFL3) <- c("P Frequency", "Q Frequency")
-AOAFL3
+#Population 2
+
+O_P2L7 <- c(p2o =  2 * (fq_GDF[1,1] + fq_GDF[1,3]) / (2 * n_indv))
+O_P2L7 <- round(O_P2L3, digits = 3)
+O_P2L7
+O_Q2L7 <-c( 1 - O_P2L3 )
+O_Q2L7 <- round(O_Q2L3, digits = 3)
+O_Q2L7
+
+#Population 7
+
+O_P7L7 <- c(p2o =  2 * (fq_GDF[2,1] + fq_GDF[2,3]) / (2 * n_indv))
+O_P7L7 <- round(O_P7L7, digits = 3)
+O_P7L7
+O_Q7L7 <-c( 1 - O_P7L7 )
+O_Q7L7 <- round(O_Q7L7, digits = 3)
+
+#Population 3
+
+O_P3L7 <- c(p3o =  2 * (fq_AFX[1,1] + fq_AFX[1,3]) / (2 * n_indv))
+O_P3L7 <- round(O_P3L7, digits = 3)
+O_P3L7
+O_Q3L7 <-c( 1 - O_P3L3 )
+O_Q3L7 <- round(O_Q3L3, digits = 3)
+O_Q3L7
+
+#Population 8
+
+O_P8L7 <- c(p2o =  2 * (fq_AFX[2,2] + fq_AFX[2,3]) / (2 * n_indv))
+O_P8L7 <- round(O_P8L7, digits = 3)
+O_P8L7
+O_Q8L7 <-c( 1 - O_P8L7 )
+O_Q8L7 <- round(O_Q8L7, digits = 3)
+O_Q8L7
+
+#AOPFL7 <- cbind(O_P2L3, O_P3L3, O_P4L3)
+#AOQFL7 <- cbind(O_Q2L3, O_Q3L3, O_Q4L3)
+
+#AOAFL3 <- rbind(AOPFL3, AOQFL3)
+#colnames(AOAFL3) <- c("Population 2", "Population 3", "Population 4")
+#rownames(AOAFL3) <- c("P Frequency", "Q Frequency")
+#AOAFL3
 
 #Expected allele frequencies
-E_P2L3 <- c(p =  (2 * p_2 * q_2) / (2 * n_indv))
-E_P2L3 <- round(E_P2L3, digits = 3)
-E_P2L3
-E_Q2L3 <- c( 1 - E_P2L3)
-E_Q2L3 <- round(E_Q2L3, digits = 3)
-E_Q2L3
 
-E_P3L3 <- c(p =  (2 * p_3 * q_3) / (2 * n_indv))
-E_P3L3 <- round(E_P3L3, digits = 3)
-E_P3L3
-E_Q3L3 <- c( 1 - E_P3L3)
-E_Q3L3 <- round(E_Q3L3, digits = 3)
-E_Q3L3
+#Population 1
 
-E_P4L3 <- c(p =  (2 * p_4 * q_4) / (2 * n_indv))
-E_P4L3 <- round(E_P4L3, digits = 3)
-E_P4L3
-E_Q4L3 <- c( 1 - E_P4L3)
-E_Q4L3 <- round(E_Q4L3, digits = 3)
-E_Q4L3
+E_P1L7 <- c(p =  (2 * p_1 * q_1) / (2 * n_indv))
+E_P1L7 <- round(E_P1L3, digits = 3)
+E_P1L7
+E_Q1L7 <- c( 1 - E_P1L3)
+E_Q1L7 <- round(E_Q1L3, digits = 3)
+E_Q1L7
 
 
-AEPFL3 <- cbind(E_P2L3, E_P3L3, E_P4L3)
-AEQFL3 <- cbind(E_Q2L3, E_Q3L3, E_Q4L3)
+#Population 6
 
-AEAFL3 <- rbind(AEPFL3, AEQFL3)
-colnames(AEAFL3) <- c("Population 2", "Population 3", "Population 4")
-rownames(AEAFL3) <- c("P Frequency", "Q Frequency")
-AEAFL3
+#E_P6L7 <- c(p =  (2 * p_1 * q_1) / (2 * n_indv))
+#E_P6L7 <- round(E_P6L7, digits = 3)
+#E_P6L7
+#E_Q6L7 <- c( 1 - E_P3L3)
+#E_Q6L7 <- round(E_Q3L3, digits = 3)
+#E_Q6L7
+
+
+#Population 2
+E_P2L7 <- c(p =  (2 * p_2 * q_2) / (2 * n_indv))
+E_P2L7 <- round(E_P2L7, digits = 3)
+E_P2L7
+E_Q2L7 <- c( 1 - E_P2L7)
+E_Q2L7 <- round(E_Q2L7, digits = 3)
+E_Q2L7
+
+
+#Population 7
+#E_P3L3 <- c(p =  (2 * p_3 * q_3) / (2 * n_indv))
+#E_P3L3 <- round(E_P3L3, digits = 3)
+#E_P3L3
+#E_Q3L3 <- c( 1 - E_P3L3)
+#E_Q3L3 <- round(E_Q3L3, digits = 3)
+#E_Q3L3
+
+#Population 3
+E_P3L7 <- c(p =  (2 * p_3 * q_3) / (2 * n_indv))
+E_P3L7 <- round(E_P2L7, digits = 3)
+E_P3L7
+E_Q3L7 <- c( 1 - E_P2L7)
+E_Q3L7 <- round(E_Q2L7, digits = 3)
+E_Q3L7
+
+#Population 8
+#E_P4L3 <- c(p =  (2 * p_4 * q_4) / (2 * n_indv))
+#E_P4L3 <- round(E_P4L3, digits = 3)
+#E_P4L3
+#E_Q4L3 <- c( 1 - E_P4L3)
+#E_Q4L3 <- round(E_Q4L3, digits = 3)
+#E_Q4L3
+
+
+#AEPFL3 <- cbind(E_P2L3, E_P3L3, E_P4L3)
+#AEQFL3 <- cbind(E_Q2L3, E_Q3L3, E_Q4L3)
+
+#AEAFL3 <- rbind(AEPFL3, AEQFL3)
+#colnames(AEAFL3) <- c("Population 2", "Population 3", "Population 4")
+#rownames(AEAFL3) <- c("P Frequency", "Q Frequency")
+#AEAFL3
 ```
 
 ### Expected and Observed Heterozygosity
@@ -347,7 +513,7 @@ AOHZL3
 Calculations for FIS
 
 ```{r}
-####
+#FIs = Ho - He / He or something
 ```
 
 ### HWE Statistical Tests
@@ -355,7 +521,7 @@ Calculations for FIS
 ?? a linear regression model as well as using boxplots to show deviation and test skewness?? refer to stats notes...
 
 ```{r}
-####
+ 
 ```
 
 ### Variable Glossary
